@@ -44,7 +44,7 @@
   toggleButtonWrapper.style.borderRadius = "18px";
   toggleButtonWrapper.style.backgroundColor = "#007bff";
   toggleButtonWrapper.style.position = "fixed";
-  toggleButtonWrapper.style.bottom = "0";
+  toggleButtonWrapper.style.bottom = "12px";
   toggleButtonWrapper.style.right = "20px";
   // toggleButtonWrapper.style.zIndex = "10000";
   toggleButtonWrapper.style.cursor = "pointer";
@@ -67,7 +67,7 @@
   containerDiv.style.justifyContent = "center";
   containerDiv.style.transition = "transform 0.3s ease";
   containerDiv.style.position = "fixed";
-  containerDiv.style.bottom = "0";
+  containerDiv.style.bottom = "12px";
   containerDiv.style.right = "20px";
   containerDiv.style.cursor = "pointer";
   containerDiv.style.zIndex = "10000";
