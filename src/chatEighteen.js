@@ -21,7 +21,7 @@
   iframe.style.zIndex = "9999";
   // iframe.style.backgroundColor = "#FFFFFF";
   iframe.style.borderRadius = "18px";
-  iframe.style.display = "none"; // Initially hidden
+  // iframe.style.display = "none"; // Initially hidden
   iframe.style.allowTransparency = "true";
 
   // Set position
@@ -39,11 +39,11 @@
     if (iframe.style.display === "none") {
       iframe.style.width = "400px";
       iframe.style.height = "650px";
-      iframe.style.display = "block";
+      // iframe.style.display = "block";
     } else {
       iframe.style.width = chatbotConfig.width;
       iframe.style.height = chatbotConfig.height;
-      iframe.style.display = "none";
+      // iframe.style.display = "none";
     }
   });
   
