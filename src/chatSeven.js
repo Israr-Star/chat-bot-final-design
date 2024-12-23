@@ -123,12 +123,13 @@
   //   }
   //   // setChatVisible((prevChatVisible) => !prevChatVisible);
   // };
-  toggleButtonWrapper.onmouseover = () => {
-    toggleButtonWrapper.style.transform = "scale(1.2)";
+  containerDiv.onmouseover = () => {
+    containerDiv.style.transform = "scale(1.2)";
   };
-  toggleButtonWrapper.onmouseout = () => {
-    toggleButtonWrapper.style.transform = "scale(1)";
+  containerDiv.onmouseout = () => {
+    containerDiv.style.transform = "scale(1)";
   };
+  document.body.appendChild(containerDiv);
 
   // Apply styles to the button
   // const toggleButton = document.createElement("div");
