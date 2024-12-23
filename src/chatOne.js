@@ -54,7 +54,7 @@ document.body.appendChild(containerDiv)(function () {
 
   // Configuration object
   const chatbotConfig = {
-    botUrl: "https://chat-ui-c724.vercel.app/", // Replace with your chatbot's URL
+    botUrl: "https://chat-bot-final-design.vercel.app/", // Replace with your chatbot's URL
     width: "400px",
     height: "600px",
     position: "bottom-right", // Options: 'bottom-right', 'bottom-left'
@@ -125,7 +125,7 @@ document.body.appendChild(containerDiv)(function () {
   containerDiv.style.right = "20px";
   containerDiv.style.cursor = "pointer";
   let isChatShown = false;
-  containerDiv.onclick = () => {
+  toggleButtonWrapper.onclick = () => {
     if (isChatShown) {
       isChatShown = false;
       containerDiv.removeChild(img);
