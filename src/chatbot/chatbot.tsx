@@ -40,7 +40,7 @@ const Chatbot: React.FC = () => {
   const [messageIdFromApi, setMessageIdFromApi] = useState('')
   const [messageArr, setMessageArr] = useState<any>()
   const [visible, setVisible] = useState(false)
-  // const [chatVisible, setChatVisible] = useState(false)
+  const [chatVisible, setChatVisible] = useState(true)
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -86,18 +86,34 @@ const Chatbot: React.FC = () => {
             try {
               const parsedData = JSON.parse(data)
               console.log('Received data:', parsedData)
-              if (parsedData.final) {
-                const arrayLength = parsedData?.runMessages?.length
-                const arr = parsedData?.runMessages[arrayLength - 1]
+              // if (parsedData?.message) {
+              //   const messageUpdate = {
+              //     isCreatedByUser: false,
+              //     text: parsedData?.text,
+              //   }
+              //   setMessageArr((prevMessages: any) => [
+              //     ...(Array.isArray(prevMessages) ? prevMessages : []),
+              //     messageUpdate,
+              //   ])
+              // }
 
-                console.log('Received data final:', arr.thread_id)
-                setThreadId(arr.thread_id)
-                setMessageIdFromApi(arr.messageId)
-                const createdBy =
-                  parsedData?.runMessages[arrayLength - 1].isCreatedByUser
+              if (parsedData.final) {
+                const arrayLength = parsedData?.responseMessage?.content?.length
+                const arr =
+                  parsedData?.responseMessage?.content[arrayLength - 1]
+
+                console.log(
+                  'Received data final:',
+                  parsedData,
+                  parsedData?.responseMessage?.thread_id,
+                )
+                setThreadId(parsedData?.responseMessage?.thread_id)
+                setMessageIdFromApi(parsedData?.responseMessage?.messageId)
+                // const createdBy =
+                //   parsedData?.responseMessage?.content[arrayLength - 1].isCreatedByUser
                 const messageUpdate = {
-                  isCreatedByUser: createdBy,
-                  text: arr.content[arr.content.length - 1].text.value,
+                  isCreatedByUser: false,
+                  text: arr.text.value,
                 }
                 console.log(messageUpdate, 'NEW MSG')
                 setMessageArr((prevMessages: any) => [
@@ -347,7 +363,10 @@ const Chatbot: React.FC = () => {
   }, [messageArr])
   return (
     <div>
-      <div className="fixed bottom-0 right-[1px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
+      <div
+        style={{ display: chatVisible ? 'block' : 'none' }}
+        className="fixed bottom-0 right-[1px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]"
+      >
         {/* Header */}
         <div className="relative w-full h-full">
           <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
@@ -402,7 +421,7 @@ const Chatbot: React.FC = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  // onClick={() => setChatVisible(false)}
+                  onClick={() => setChatVisible(false)}
                   className="cursor-pointer"
                 >
                   <path
