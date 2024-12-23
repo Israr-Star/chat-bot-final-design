@@ -43,7 +43,8 @@ const Chatbot: React.FC = () => {
   const [chatVisible, setChatVisible] = useState(false)
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
-
+  const [isMsgLoading, setIsMsgLoading] = useState(false)
+  const scrollableDivRef = useRef<HTMLDivElement>(null)
   async function fetchSSE(
     url: string,
     options: {
@@ -51,6 +52,7 @@ const Chatbot: React.FC = () => {
       headers: Record<string, string>
     },
   ) {
+    setIsMsgLoading(true)
     const response = await fetch(url, {
       method: 'POST',
       headers: options.headers,
@@ -86,18 +88,19 @@ const Chatbot: React.FC = () => {
             try {
               const parsedData = JSON.parse(data)
               console.log('Received data:', parsedData)
-              // if (parsedData?.message) {
-              //   const messageUpdate = {
-              //     isCreatedByUser: false,
-              //     text: parsedData?.text,
-              //   }
-              //   setMessageArr((prevMessages: any) => [
-              //     ...(Array.isArray(prevMessages) ? prevMessages : []),
-              //     messageUpdate,
-              //   ])
-              // }
+              if (parsedData?.message) {
+                // const messageUpdate = {
+                //   isCreatedByUser: false,
+                //   text: parsedData?.text,
+                // }
+                // setMessageArr((prevMessages: any) => [
+                //   ...(Array.isArray(prevMessages) ? prevMessages : []),
+                //   messageUpdate,
+                // ])
+              }
 
               if (parsedData.final) {
+                setIsMsgLoading(false)
                 const arrayLength = parsedData?.responseMessage?.content?.length
                 const arr =
                   parsedData?.responseMessage?.content[arrayLength - 1]
@@ -175,23 +178,16 @@ const Chatbot: React.FC = () => {
   }
   const startProgress = async () => {
     setInputValue('')
+    setShowSendButton(false)
 
-    let progressValue = 0
-    const interval = setInterval(() => {
-      progressValue += 50
-      setProgress(progressValue)
-      if (progressValue >= 100) {
-        const messageUpdate = {
-          isCreatedByUser: true,
-          text: inputValue,
-        }
-        setMessageArr((prevMessages: any) => [
-          ...(Array.isArray(prevMessages) ? prevMessages : []),
-          messageUpdate,
-        ])
-        clearInterval(interval)
-      }
-    }, 100) // Adjust the interval time as needed
+    const messageUpdate = {
+      isCreatedByUser: true,
+      text: inputValue,
+    }
+    setMessageArr((prevMessages: any) => [
+      ...(Array.isArray(prevMessages) ? prevMessages : []),
+      messageUpdate,
+    ])
 
     // if (progressValue === 100) {
     //   setMessageArr((prevMessages: any) => [
@@ -252,7 +248,16 @@ const Chatbot: React.FC = () => {
 
     // Start a new timer
     timeoutRef.current = setTimeout(() => {
-      setShowSendButton(true) // Show send button after typing stops
+      let progressValue = 0
+      const interval = setInterval(() => {
+        progressValue += 50
+        setProgress(progressValue)
+        if (progressValue >= 100) {
+          setShowSendButton(true) // Show send button after typing stops
+
+          clearInterval(interval)
+        }
+      }, 100) // Adjust the interval time as needed
     }, 600)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -337,29 +342,65 @@ const Chatbot: React.FC = () => {
       setVisible(true)
     }, 1000)
   }, [])
-  console.log(messageArr, messageArr?.length, 'MESSAGE_ARR')
+  console.log(isMsgLoading, 'isMsgLoading')
   const renderedMessages = React.useMemo(() => {
     return (
       messageArr?.length &&
       messageArr?.map((messageItem: any, index: number) => (
         <div key={index}>
           {messageItem?.isCreatedByUser && (
-            <div className="relative flex gap-4 pl-[49px] pr-[16px] justify-end py-4">
-              <div className="receiverCorner">{messageItem.text}</div>
-              <div className="h-8 min-w-[32px] bg-[#94A3B8] rounded-full"></div>
+            <div>
+              <div className="relative flex gap-4 pl-[49px] pr-[16px] justify-end py-4">
+                <div className="receiverCorner">{messageItem.text}</div>
+                <div className="h-8 min-w-[32px] bg-[#94A3B8] rounded-full"></div>
+              </div>
+              {/* {isMsgLoading && messageArr?.length - 1 === index && (
+                <div className="flex items-center pl-[49px]">
+                  <div className="loader-container">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                  </div>
+                  <p className="text-[#CBD5E1] font-sans text-sm font-medium leading-5 tracking-normal text-left decoration-skip-ink">
+                    Replying in a few seconds...
+                  </p>
+                </div>
+              )} */}
+              <div className="flex items-center pl-[49px]">
+                <div className="loader-container">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+                <p className="text-[#CBD5E1] font-sans text-sm font-medium leading-5 tracking-normal text-left decoration-skip-ink">
+                  Replying in a few seconds...
+                </p>
+              </div>
             </div>
           )}
 
           {/* AI Reply */}
           {!messageItem?.isCreatedByUser && (
             <div className="relative flex gap-4 pr-[49px] pl-[16px] justify-start py-4">
-              <div className="min-w-[32px] h-8 bg-[#94A3B8] rounded-full"></div>
+              <div
+                className="min-w-[32px] h-8 rounded-full"
+                style={{
+                  background: 'linear-gradient(90deg, #FF007E, #00E5FF)',
+                }}
+              ></div>
               <div className="leftCorner">{messageItem?.text}</div>
             </div>
           )}
         </div>
       ))
     )
+  }, [messageArr, isMsgLoading])
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
+    }
   }, [messageArr])
   return (
     <>
@@ -467,13 +508,13 @@ const Chatbot: React.FC = () => {
               )}
 
               <div className="absolute bottom-0 w-full">
-                <div className="scrollable-container">
+                <div className="scrollable-container" ref={scrollableDivRef}>
                   {messageArr?.length && renderedMessages}
                 </div>
 
                 <div className="h-[64px] rounded-b-[12px] mt-auto bg-[#F8FAFC]">
                   <div className="w-full h-[3px] bg-[#E2E8F0] overflow-hidden">
-                    {progress !== 100 && (
+                    {showSendButton && (
                       <div
                         className="h-full"
                         style={{
@@ -490,7 +531,8 @@ const Chatbot: React.FC = () => {
                       placeholder="Ask a question..."
                       value={inputValue}
                       onChange={handleChange}
-                      // onKeyDown={handleKeyDown}
+                      // onKeyDown={startProgress}
+                      // onMouseEnter={startProgress}
                     />
                     {inputValue !== '' && (
                       <div
@@ -541,9 +583,9 @@ const Chatbot: React.FC = () => {
         <></>
       )}
       <div
-        className={`fixed bottom-5 right-5 w-14 h-14 rounded-lg bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-5 right-0 w-14 h-14 rounded-[20px] bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
           chatVisible ? 'scale-120' : 'scale-100'
-        } shadow-lg`}
+        } shadow-[0px_24px_16px_-5px_rgba(124,58,237,0.16),0px_20px_25px_-5px_rgba(0,0,0,0.2)]`}
         onClick={() => setChatVisible((prevChatVisible) => !prevChatVisible)}
         onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.2)')}
         onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
