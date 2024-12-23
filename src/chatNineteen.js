@@ -36,7 +36,7 @@
   // Append iframe to body
   document.body.appendChild(iframe);
   iframe.addEventListener("click", () => {
-    if (iframe.style.display === "none") {
+    if (iframe.style.width === chatbotConfig.width) {
       iframe.style.width = "400px";
       iframe.style.height = "650px";
       // iframe.style.display = "block";
@@ -46,7 +46,6 @@
       // iframe.style.display = "none";
     }
   });
-  
 
   // Create toggle button
 
