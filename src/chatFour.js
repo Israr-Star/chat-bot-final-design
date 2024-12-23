@@ -20,7 +20,7 @@
   iframe.style.border = "none";
   iframe.style.zIndex = "9999";
   iframe.style.backgroundColor = "red";
-  // iframe.style.display = "none"; // Initially hidden
+  iframe.style.display = "none"; // Initially hidden
 
   // Set position
   if (chatbotConfig.position === "bottom-right") {
@@ -39,8 +39,8 @@
   const toggleButtonWrapper = document.createElement("iframe");
 
   // Apply styles to the button
-  toggleButtonWrapper.style.width = "40px";
-  toggleButtonWrapper.style.height = "40px";
+  toggleButtonWrapper.style.width = "54px";
+  toggleButtonWrapper.style.height = "54px";
   toggleButtonWrapper.style.borderRadius = "50%";
   toggleButtonWrapper.style.backgroundColor = "#007bff";
   toggleButtonWrapper.style.position = "fixed";
@@ -75,8 +75,10 @@
   containerDiv.style.bottom = 0;
   containerDiv.style.right = "20px";
   containerDiv.style.cursor = "pointer";
+  containerDiv.style.zIndex = "10000";
+
   let isChatShown = false;
-  containerDiv.onclick = () => {
+  toggleButtonWrapper.onclick = () => {
     if (isChatShown) {
       isChatShown = false;
       containerDiv.removeChild(img);
