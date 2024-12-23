@@ -6,8 +6,8 @@
   // Configuration object
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/", // Replace with your chatbot's URL
-    width: "400px",
-    height: "650px",
+    width: "54px",
+    height: "54px",
     position: "bottom-right", // Options: 'bottom-right', 'bottom-left'
   };
 
@@ -21,7 +21,7 @@
   iframe.style.zIndex = "9999";
   // iframe.style.backgroundColor = "#FFFFFF";
   iframe.style.borderRadius = "18px";
-  // iframe.style.display = "none"; // Initially hidden
+  iframe.style.display = "none"; // Initially hidden
   iframe.style.allowTransparency = "true";
 
   // Set position
@@ -35,6 +35,18 @@
 
   // Append iframe to body
   document.body.appendChild(iframe);
+  iframe.addEventListener("click", () => {
+    if (iframe.style.display === "none") {
+      iframe.style.width = "400px";
+      iframe.style.height = "650px";
+      iframe.style.display = "block";
+    } else {
+      iframe.style.width = chatbotConfig.width;
+      iframe.style.height = chatbotConfig.height;
+      iframe.style.display = "none";
+    }
+  });
+  
 
   // Create toggle button
 
