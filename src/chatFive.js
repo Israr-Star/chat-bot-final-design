@@ -46,7 +46,7 @@
   toggleButtonWrapper.style.position = "fixed";
   toggleButtonWrapper.style.bottom = "0";
   toggleButtonWrapper.style.right = "20px";
-  toggleButtonWrapper.style.zIndex = "10000";
+  // toggleButtonWrapper.style.zIndex = "10000";
   toggleButtonWrapper.style.cursor = "pointer";
   toggleButtonWrapper.style.display = "flex";
   toggleButtonWrapper.style.alignItems = "center";
@@ -78,17 +78,9 @@
   containerDiv.style.zIndex = "10000";
 
   let isChatShown = false;
-  toggleButtonWrapper.onclick = () => {
-    if (isChatShown) {
-      isChatShown = false;
-      containerDiv.removeChild(img);
-      img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
-      img.alt = "SVG Icon";
-      img.style.width = "24px";
-      img.style.height = "24px";
-      containerDiv.appendChild(img);
-      iframe.style.display = "none";
-    } else {
+
+  toggleButtonWrapper.addEventListener("click", () => {
+    if (iframe.style.display === "none") {
       isChatShown = true;
       containerDiv.removeChild(img);
       img.src = "/src/assets/icon/arrow.svg"; // Replace with the path to your SVG icon
@@ -97,9 +89,39 @@
       img.style.height = "24px";
       containerDiv.appendChild(img);
       iframe.style.display = "block";
+    } else {
+      isChatShown = false;
+      containerDiv.removeChild(img);
+      img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
+      img.alt = "SVG Icon";
+      img.style.width = "24px";
+      img.style.height = "24px";
+      containerDiv.appendChild(img);
+      iframe.style.display = "none";
     }
-    // setChatVisible((prevChatVisible) => !prevChatVisible);
-  };
+  });
+  // toggleButtonWrapper.onclick = () => {
+  //   if (isChatShown) {
+  //     isChatShown = false;
+  //     containerDiv.removeChild(img);
+  //     img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
+  //     img.alt = "SVG Icon";
+  //     img.style.width = "24px";
+  //     img.style.height = "24px";
+  //     containerDiv.appendChild(img);
+  //     iframe.style.display = "none";
+  //   } else {
+  //     isChatShown = true;
+  //     containerDiv.removeChild(img);
+  //     img.src = "/src/assets/icon/arrow.svg"; // Replace with the path to your SVG icon
+  //     img.alt = "SVG Icon";
+  //     img.style.width = "24px";
+  //     img.style.height = "24px";
+  //     containerDiv.appendChild(img);
+  //     iframe.style.display = "block";
+  //   }
+  //   // setChatVisible((prevChatVisible) => !prevChatVisible);
+  // };
   toggleButtonWrapper.onmouseover = () => {
     toggleButtonWrapper.style.transform = "scale(1.2)";
   };
@@ -137,11 +159,11 @@
 
   // // Add click event listener to toggle the iframe
   // toggleButton.addEventListener("click", () => {
-  //   if (iframe.style.display === "none") {
-  //     iframe.style.display = "block";
-  //   } else {
-  //     iframe.style.display = "none";
-  //   }
+  // if (iframe.style.display === "none") {
+  //   iframe.style.display = "block";
+  // } else {
+  //   iframe.style.display = "none";
+  // }
   // });
   //   toggleButtonWrapper.onclick = function () {};
 })();
