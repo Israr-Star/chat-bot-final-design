@@ -41,7 +41,7 @@
   // Apply styles to the button
   toggleButtonWrapper.style.width = "54px";
   toggleButtonWrapper.style.height = "54px";
-  toggleButtonWrapper.style.borderRadius = "50%";
+  toggleButtonWrapper.style.borderRadius = "18px";
   toggleButtonWrapper.style.backgroundColor = "#007bff";
   toggleButtonWrapper.style.position = "fixed";
   toggleButtonWrapper.style.bottom = "0";
@@ -57,12 +57,7 @@
   const containerDiv = document.createElement("div");
   containerDiv.style.boxShadow =
     "0px 24px 16px -5px #7C3AED29, 0px 20px 25px -5px #00000033";
-  const img = document.createElement("img");
-  img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
-  img.alt = "SVG Icon";
-  img.style.width = "24px";
-  img.style.height = "24px";
-  containerDiv.appendChild(img);
+
   containerDiv.style.width = "54px";
   containerDiv.style.height = "54px";
   containerDiv.style.borderRadius = "18px";
@@ -72,14 +67,20 @@
   containerDiv.style.justifyContent = "center";
   containerDiv.style.transition = "transform 0.3s ease";
   containerDiv.style.position = "fixed";
-  containerDiv.style.bottom = 0;
+  containerDiv.style.bottom = "0";
   containerDiv.style.right = "20px";
   containerDiv.style.cursor = "pointer";
   containerDiv.style.zIndex = "10000";
+  const img = document.createElement("img");
+  img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
+  img.alt = "SVG Icon";
+  img.style.width = "24px";
+  img.style.height = "24px";
+  containerDiv.appendChild(img);
 
   let isChatShown = false;
 
-  toggleButtonWrapper.addEventListener("click", () => {
+  containerDiv.addEventListener("click", () => {
     if (iframe.style.display === "none") {
       isChatShown = true;
       containerDiv.removeChild(img);
