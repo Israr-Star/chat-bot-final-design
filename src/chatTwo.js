@@ -1,53 +1,4 @@
-const containerDiv = document.createElement("div");
-containerDiv.style.boxShadow =
-  "0px 24px 16px -5px #7C3AED29, 0px 20px 25px -5px #00000033";
-const img = document.createElement("img");
-img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
-img.alt = "SVG Icon";
-img.style.width = "24px";
-img.style.height = "24px";
-containerDiv.appendChild(img);
-containerDiv.style.width = "54px";
-containerDiv.style.height = "54px";
-containerDiv.style.borderRadius = "18px";
-containerDiv.style.backgroundColor = "#7C3AED";
-containerDiv.style.display = "flex";
-containerDiv.style.alignItems = "center";
-containerDiv.style.justifyContent = "center";
-containerDiv.style.transition = "transform 0.3s ease";
-containerDiv.style.position = "fixed";
-containerDiv.style.bottom = "20px";
-containerDiv.style.right = "20px";
-containerDiv.style.cursor = "pointer";
-let isChatShown = false;
-containerDiv.onclick = () => {
-  if (isChatShown) {
-    isChatShown = false;
-    containerDiv.removeChild(img);
-    img.src = "/src/assets/icon/chat.svg"; // Replace with the path to your SVG icon
-    img.alt = "SVG Icon";
-    img.style.width = "24px";
-    img.style.height = "24px";
-    containerDiv.appendChild(img);
-  } else {
-    isChatShown = true;
-    containerDiv.removeChild(img);
-    img.src = "/src/assets/icon/arrow.svg"; // Replace with the path to your SVG icon
-    img.alt = "SVG Icon";
-    img.style.width = "24px";
-    img.style.height = "24px";
-    containerDiv.appendChild(img);
-  }
-  setChatVisible((prevChatVisible) => !prevChatVisible);
-};
-containerDiv.onmouseover = () => {
-  containerDiv.style.transform = "scale(1.2)";
-};
-containerDiv.onmouseout = () => {
-  containerDiv.style.transform = "scale(1)";
-};
-
-document.body.appendChild(containerDiv)(function () {
+(function () {
   // Check if the script is already loaded
   if (window.ChatbotScriptLoaded) return;
   window.ChatbotScriptLoaded = true;
@@ -69,7 +20,7 @@ document.body.appendChild(containerDiv)(function () {
   iframe.style.border = "none";
   iframe.style.zIndex = "9999";
   iframe.style.backgroundColor = "red";
-  iframe.style.display = "none"; // Initially hidden
+  // iframe.style.display = "none"; // Initially hidden
 
   // Set position
   if (chatbotConfig.position === "bottom-right") {
