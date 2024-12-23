@@ -7,7 +7,7 @@
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/", // Replace with your chatbot's URL
     width: "400px",
-    height: "560",
+    height: "560px",
     position: "bottom-right", // Options: 'bottom-right', 'bottom-left'
   };
 
