@@ -26,10 +26,10 @@
 
   // Set position
   if (chatbotConfig.position === "bottom-right") {
-    iframe.style.bottom = "90px";
+    iframe.style.bottom = "0";
     iframe.style.right = "20px";
   } else if (chatbotConfig.position === "bottom-left") {
-    iframe.style.bottom = "90px";
+    iframe.style.bottom = "0";
     iframe.style.left = "20px";
   }
 

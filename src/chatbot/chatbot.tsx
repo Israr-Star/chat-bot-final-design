@@ -365,7 +365,7 @@ const Chatbot: React.FC = () => {
     <>
       {chatVisible ? (
         <div>
-          <div className="fixed bottom-[40px] right-[10px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
+          <div className="fixed bottom-[90px] right-0 w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
             {/* Header */}
             <div className="relative w-full h-full">
               <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
@@ -551,8 +551,8 @@ const Chatbot: React.FC = () => {
         <img
           src={
             chatVisible
-              ? '/src/assets/icon/arrow.svg'
-              : '/src/assets/icon/chat.svg'
+              ? 'http://localhost:5173/src/assets/icon/arrow.svg'
+              : 'http://localhost:5173/src/assets/icon/chat.svg'
           }
           alt="SVG Icon"
           className="w-6 h-6"
