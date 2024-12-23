@@ -36,7 +36,10 @@
   // Append iframe to body
   document.body.appendChild(iframe);
   iframe.addEventListener("click", () => {
-    if (iframe.style.width === chatbotConfig.width) {
+    console.log(iframe.offsetWidth, "width");
+    if (iframe.offsetWidth === chatbotConfig.width) {
+      console.log(iframe.offsetWidth, "width matched");
+
       document.body.removeChild(iframe);
       iframe.src = chatbotConfig.botUrl;
       iframe.style.width = "400px";
@@ -50,6 +53,8 @@
       // iframe.style.display = "block";
       document.body.appendChild(iframe);
     } else {
+      console.log(iframe.offsetWidth, "width matched2");
+
       document.body.removeChild(iframe);
       iframe.src = chatbotConfig.botUrl;
       iframe.style.width = chatbotConfig.width;
