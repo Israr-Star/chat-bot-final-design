@@ -7,7 +7,7 @@
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/", // Replace with your chatbot's URL
     width: "400px",
-    height: "560px",
+    height: "660px",
     position: "bottom-right", // Options: 'bottom-right', 'bottom-left'
   };
 
@@ -19,9 +19,10 @@
   iframe.style.position = "fixed";
   iframe.style.border = "none";
   iframe.style.zIndex = "9999";
-  iframe.style.backgroundColor = "#FFFFFF";
+  // iframe.style.backgroundColor = "#FFFFFF";
   iframe.style.borderRadius = "18px";
   iframe.style.display = "none"; // Initially hidden
+  iframe.style.allowTransparency = "true";
 
   // Set position
   if (chatbotConfig.position === "bottom-right") {
