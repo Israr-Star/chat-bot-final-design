@@ -125,7 +125,7 @@ document.body.appendChild(containerDiv)(function () {
   containerDiv.style.right = "20px";
   containerDiv.style.cursor = "pointer";
   let isChatShown = false;
-  toggleButtonWrapper.onclick = () => {
+  containerDiv.onclick = () => {
     if (isChatShown) {
       isChatShown = false;
       containerDiv.removeChild(img);
