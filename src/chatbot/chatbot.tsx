@@ -40,7 +40,7 @@ const Chatbot: React.FC = () => {
   const [messageIdFromApi, setMessageIdFromApi] = useState('')
   const [messageArr, setMessageArr] = useState<any>()
   const [visible, setVisible] = useState(false)
-  const [chatVisible, setChatVisible] = useState(false)
+  // const [chatVisible, setChatVisible] = useState(false)
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -243,73 +243,73 @@ const Chatbot: React.FC = () => {
   // let svgArrowContainer: any = null // Declare a variable to track the container
 
   // function createSvgArrow() {
-    // if (svgArrowContainer) {
-    //   return // Exit if the container already exists
-    // }
-    // Create an SVG element and set its attributes
-    // const svgNS = 'http://www.w3.org/2000/svg'
-    // const svg = document.createElementNS(svgNS, 'svg')
-    // svg.setAttribute('width', '30')
-    // svg.setAttribute('height', '30')
-    // svg.setAttribute('viewBox', '0 0 24 24')
-    // // Create a polygon element for the down arrow and set attributes
-    // const polygon = document.createElementNS(svgNS, 'polygon')
-    // polygon.setAttribute('points', '12,16 4,8 20,8')
-    // polygon.setAttribute('fill', 'white')
-    // // Append the polygon to the SVG element
-    // svg.appendChild(polygon)
-    // Create the container div
-    // const containerDiv = document.createElement('div')
-    // containerDiv.style.boxShadow =
-    //   '0px 24px 16px -5px #7C3AED29, 0px 20px 25px -5px #00000033'
-    // const img = document.createElement('img')
-    // img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
-    // img.alt = 'SVG Icon'
-    // img.style.width = '24px'
-    // img.style.height = '24px'
-    // containerDiv.appendChild(img)
-    // containerDiv.style.width = '54px'
-    // containerDiv.style.height = '54px'
-    // containerDiv.style.borderRadius = '18px'
-    // containerDiv.style.backgroundColor = '#7C3AED'
-    // containerDiv.style.display = 'flex'
-    // containerDiv.style.alignItems = 'center'
-    // containerDiv.style.justifyContent = 'center'
-    // containerDiv.style.transition = 'transform 0.3s ease'
-    // containerDiv.style.position = 'fixed'
-    // containerDiv.style.bottom = '20px'
-    // containerDiv.style.right = '20px'
-    // containerDiv.style.cursor = 'pointer'
-    // let isChatShown = false
-    // containerDiv.onclick = () => {
-    //   if (isChatShown) {
-    //     isChatShown = false
-    //     containerDiv.removeChild(img)
-    //     img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
-    //     img.alt = 'SVG Icon'
-    //     img.style.width = '24px'
-    //     img.style.height = '24px'
-    //     containerDiv.appendChild(img)
-    //   } else {
-    //     isChatShown = true
-    //     containerDiv.removeChild(img)
-    //     img.src = '/src/assets/icon/arrow.svg' // Replace with the path to your SVG icon
-    //     img.alt = 'SVG Icon'
-    //     img.style.width = '24px'
-    //     img.style.height = '24px'
-    //     containerDiv.appendChild(img)
-    //   }
-    //   setChatVisible((prevChatVisible) => !prevChatVisible)
-    // }
-    // containerDiv.onmouseover = () => {
-    //   containerDiv.style.transform = 'scale(1.2)'
-    // }
-    // containerDiv.onmouseout = () => {
-    //   containerDiv.style.transform = 'scale(1)'
-    // }
-    // document.body.appendChild(containerDiv)
-    // Save the reference
-    // svgArrowContainer = containerDiv
+  // if (svgArrowContainer) {
+  //   return // Exit if the container already exists
+  // }
+  // Create an SVG element and set its attributes
+  // const svgNS = 'http://www.w3.org/2000/svg'
+  // const svg = document.createElementNS(svgNS, 'svg')
+  // svg.setAttribute('width', '30')
+  // svg.setAttribute('height', '30')
+  // svg.setAttribute('viewBox', '0 0 24 24')
+  // // Create a polygon element for the down arrow and set attributes
+  // const polygon = document.createElementNS(svgNS, 'polygon')
+  // polygon.setAttribute('points', '12,16 4,8 20,8')
+  // polygon.setAttribute('fill', 'white')
+  // // Append the polygon to the SVG element
+  // svg.appendChild(polygon)
+  // Create the container div
+  // const containerDiv = document.createElement('div')
+  // containerDiv.style.boxShadow =
+  //   '0px 24px 16px -5px #7C3AED29, 0px 20px 25px -5px #00000033'
+  // const img = document.createElement('img')
+  // img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
+  // img.alt = 'SVG Icon'
+  // img.style.width = '24px'
+  // img.style.height = '24px'
+  // containerDiv.appendChild(img)
+  // containerDiv.style.width = '54px'
+  // containerDiv.style.height = '54px'
+  // containerDiv.style.borderRadius = '18px'
+  // containerDiv.style.backgroundColor = '#7C3AED'
+  // containerDiv.style.display = 'flex'
+  // containerDiv.style.alignItems = 'center'
+  // containerDiv.style.justifyContent = 'center'
+  // containerDiv.style.transition = 'transform 0.3s ease'
+  // containerDiv.style.position = 'fixed'
+  // containerDiv.style.bottom = '20px'
+  // containerDiv.style.right = '20px'
+  // containerDiv.style.cursor = 'pointer'
+  // let isChatShown = false
+  // containerDiv.onclick = () => {
+  //   if (isChatShown) {
+  //     isChatShown = false
+  //     containerDiv.removeChild(img)
+  //     img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
+  //     img.alt = 'SVG Icon'
+  //     img.style.width = '24px'
+  //     img.style.height = '24px'
+  //     containerDiv.appendChild(img)
+  //   } else {
+  //     isChatShown = true
+  //     containerDiv.removeChild(img)
+  //     img.src = '/src/assets/icon/arrow.svg' // Replace with the path to your SVG icon
+  //     img.alt = 'SVG Icon'
+  //     img.style.width = '24px'
+  //     img.style.height = '24px'
+  //     containerDiv.appendChild(img)
+  //   }
+  //   setChatVisible((prevChatVisible) => !prevChatVisible)
+  // }
+  // containerDiv.onmouseover = () => {
+  //   containerDiv.style.transform = 'scale(1.2)'
+  // }
+  // containerDiv.onmouseout = () => {
+  //   containerDiv.style.transform = 'scale(1)'
+  // }
+  // document.body.appendChild(containerDiv)
+  // Save the reference
+  // svgArrowContainer = containerDiv
   // }
   // Use in useEffect
   // useEffect(() => {
@@ -345,7 +345,7 @@ const Chatbot: React.FC = () => {
       ))
     )
   }, [messageArr])
-  return chatVisible ? (
+  return (
     <div>
       <div className="fixed bottom-[5.75rem] right-5 w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
         {/* Header */}
@@ -402,7 +402,7 @@ const Chatbot: React.FC = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={() => setChatVisible(false)}
+                  // onClick={() => setChatVisible(false)}
                   className="cursor-pointer"
                 >
                   <path
@@ -519,8 +519,6 @@ const Chatbot: React.FC = () => {
         </div>
       </div>
     </div>
-  ) : (
-    <></>
   )
 }
 
