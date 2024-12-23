@@ -73,7 +73,7 @@
   containerDiv.style.cursor = "pointer";
   containerDiv.style.zIndex = "10000";
   const img = document.createElement("img");
-  img.src = "../public/icon/chat.svg"; // Replace with the path to your SVG icon
+  img.src = "http://localhost:5173/public/icon/chat.svg"; // Replace with the path to your SVG icon
   img.alt = "SVG Icon";
   img.style.width = "24px";
   img.style.height = "24px";
@@ -85,7 +85,7 @@
     if (iframe.style.display === "none") {
       iframe.style.display = "block";
       containerDiv.removeChild(img);
-      img.src = "/public/icon/arrow.svg"; // Replace with the path to your SVG icon
+      img.src = "http://localhost:5173/public/icon/arrow.svg"; // Replace with the path to your SVG icon
       img.alt = "SVG Icon";
       img.style.width = "24px";
       img.style.height = "24px";
@@ -93,7 +93,7 @@
     } else {
       iframe.style.display = "none";
       containerDiv.removeChild(img);
-      img.src = "/public/icon/chat.svg"; // Replace with the path to your SVG icon
+      img.src = "http://localhost:5173/public/icon/chat.svg"; // Replace with the path to your SVG icon
       img.alt = "SVG Icon";
       img.style.width = "24px";
       img.style.height = "24px";
