@@ -115,14 +115,14 @@ const Chatbot: React.FC = () => {
 
     await processStream()
   }
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      // Handle the input submission
-      console.log('User input:', inputValue)
-      // Clear the input field
-      setInputValue('')
-    }
-  }
+  // const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === 'Enter') {
+  //     // Handle the input submission
+  //     console.log('User input:', inputValue)
+  //     // Clear the input field
+  //     setInputValue('')
+  //   }
+  // }
 
   const makeApiCall = async () => {
     const headers = {
@@ -240,9 +240,9 @@ const Chatbot: React.FC = () => {
     }, 600)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let svgArrowContainer: any = null // Declare a variable to track the container
+  // let svgArrowContainer: any = null // Declare a variable to track the container
 
-  function createSvgArrow() {
+  // function createSvgArrow() {
     // if (svgArrowContainer) {
     //   return // Exit if the container already exists
     // }
@@ -310,7 +310,7 @@ const Chatbot: React.FC = () => {
     // document.body.appendChild(containerDiv)
     // Save the reference
     // svgArrowContainer = containerDiv
-  }
+  // }
   // Use in useEffect
   // useEffect(() => {
   //   createSvgArrow()
