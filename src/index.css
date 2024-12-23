@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  /* font-family: 'Inter', sans-serif;
+  background-color: #030813;
+  color: #1f2937; */
+}
+:root {
+  --primary: #7c3aed;
+  --color-slate-gray: #d1d5db;
+}
+.chat-container {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10px;
+}
+
+.chat-bubble {
+  max-width: 300px;
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 10px 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  position: relative;
+  border-radius: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.chat-bubble {
+  position: relative;
+  background: green;
+  height: 200px;
+}
+.chat-bubble::after,
+.chat-bubble::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: -2px;
+  right: -12px;
+  bottom: 0;
+  /* margin: auto 0; */
+  width: 54px;
+  height: 52px;
+  background: green;
+  transform: rotate(-69deg);
+  /* clip-path: polygon(100% 0, 0% 100%, 100% 100%); */
+  clip-path: polygon(90% 31%, -6% 102%, 133% 156%);
+  border-radius: 0 0 20px 0;
+}
+
+/* add a shadow if you want */
+.chat-bubble::before {
+  margin-left: 3px;
+  background: black;
+  opacity: 0.5;
+  display: none;
+}
