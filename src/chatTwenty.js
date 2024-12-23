@@ -37,13 +37,31 @@
   document.body.appendChild(iframe);
   iframe.addEventListener("click", () => {
     if (iframe.style.width === chatbotConfig.width) {
+      document.body.removeChild(iframe);
+      iframe.src = chatbotConfig.botUrl;
       iframe.style.width = "400px";
       iframe.style.height = "650px";
+      iframe.style.border = "none";
+      iframe.style.zIndex = "9999";
+      // iframe.style.backgroundColor = "#FFFFFF";
+      iframe.style.borderRadius = "18px";
+      // iframe.style.display = "none"; // Initially hidden
+      iframe.style.allowTransparency = "true";
       // iframe.style.display = "block";
+      document.body.appendChild(iframe);
     } else {
+      document.body.removeChild(iframe);
+      iframe.src = chatbotConfig.botUrl;
       iframe.style.width = chatbotConfig.width;
       iframe.style.height = chatbotConfig.height;
+      iframe.style.border = "none";
+      iframe.style.zIndex = "9999";
+      // iframe.style.backgroundColor = "#FFFFFF";
+      iframe.style.borderRadius = "18px";
+      // iframe.style.display = "none"; // Initially hidden
+      iframe.style.allowTransparency = "true";
       // iframe.style.display = "none";
+      document.body.appendChild(iframe);
     }
   });
 
