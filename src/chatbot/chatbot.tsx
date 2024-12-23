@@ -354,7 +354,7 @@ const Chatbot: React.FC = () => {
                 <div className="receiverCorner">{messageItem.text}</div>
                 <div className="h-8 min-w-[32px] bg-[#94A3B8] rounded-full"></div>
               </div>
-              {/* {isMsgLoading && messageArr?.length - 1 === index && (
+              {isMsgLoading && messageArr?.length - 1 === index && (
                 <div className="flex items-center pl-[49px]">
                   <div className="loader-container">
                     <div className="dot"></div>
@@ -365,17 +365,7 @@ const Chatbot: React.FC = () => {
                     Replying in a few seconds...
                   </p>
                 </div>
-              )} */}
-              <div className="flex items-center pl-[49px]">
-                <div className="loader-container">
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                </div>
-                <p className="text-[#CBD5E1] font-sans text-sm font-medium leading-5 tracking-normal text-left decoration-skip-ink">
-                  Replying in a few seconds...
-                </p>
-              </div>
+              )}
             </div>
           )}
 
@@ -583,7 +573,7 @@ const Chatbot: React.FC = () => {
         <></>
       )}
       <div
-        className={`fixed bottom-5 right-0 w-14 h-14 rounded-[20px] bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-5 right-[5px] w-14 h-14 rounded-[20px] bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
           chatVisible ? 'scale-120' : 'scale-100'
         } shadow-[0px_24px_16px_-5px_rgba(124,58,237,0.16),0px_20px_25px_-5px_rgba(0,0,0,0.2)]`}
         onClick={() => setChatVisible((prevChatVisible) => !prevChatVisible)}
