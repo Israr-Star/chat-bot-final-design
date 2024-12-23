@@ -73,7 +73,7 @@
   containerDiv.style.cursor = "pointer";
   containerDiv.style.zIndex = "10000";
   const img = document.createElement("img");
-  img.src = "/public/icon/chat.svg"; // Replace with the path to your SVG icon
+  img.src = "../public/icon/chat.svg"; // Replace with the path to your SVG icon
   img.alt = "SVG Icon";
   img.style.width = "24px";
   img.style.height = "24px";
@@ -83,23 +83,21 @@
 
   containerDiv.addEventListener("click", () => {
     if (iframe.style.display === "none") {
-      isChatShown = true;
+      iframe.style.display = "block";
       containerDiv.removeChild(img);
       img.src = "/public/icon/arrow.svg"; // Replace with the path to your SVG icon
       img.alt = "SVG Icon";
       img.style.width = "24px";
       img.style.height = "24px";
       containerDiv.appendChild(img);
-      iframe.style.display = "block";
     } else {
-      isChatShown = false;
+      iframe.style.display = "none";
       containerDiv.removeChild(img);
       img.src = "/public/icon/chat.svg"; // Replace with the path to your SVG icon
       img.alt = "SVG Icon";
       img.style.width = "24px";
       img.style.height = "24px";
       containerDiv.appendChild(img);
-      iframe.style.display = "none";
     }
   });
   // toggleButtonWrapper.onclick = () => {
