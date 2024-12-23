@@ -40,7 +40,7 @@ const Chatbot: React.FC = () => {
   const [messageIdFromApi, setMessageIdFromApi] = useState('')
   const [messageArr, setMessageArr] = useState<any>()
   const [visible, setVisible] = useState(false)
-  const [chatVisible, setChatVisible] = useState(true)
+  const [chatVisible, setChatVisible] = useState(false)
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
 

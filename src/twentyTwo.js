@@ -6,8 +6,8 @@
   // Configuration object
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/", // Replace with your chatbot's URL
-    width: "54px",
-    height: "54px",
+    width: "400px",
+    height: "660px",
     position: "bottom-right", // Options: 'bottom-right', 'bottom-left'
   };
 
@@ -26,49 +26,15 @@
 
   // Set position
   if (chatbotConfig.position === "bottom-right") {
-    iframe.style.bottom = "0";
+    iframe.style.bottom = "90px";
     iframe.style.right = "20px";
   } else if (chatbotConfig.position === "bottom-left") {
-    iframe.style.bottom = "0";
+    iframe.style.bottom = "90px";
     iframe.style.left = "20px";
   }
 
   // Append iframe to body
   document.body.appendChild(iframe);
-  iframe.addEventListener("click", () => {
-    console.log(iframe.offsetWidth, "width");
-    if (iframe.offsetWidth === chatbotConfig.width) {
-      console.log(iframe.offsetWidth, "width matched");
-
-      document.body.removeChild(iframe);
-      iframe.src = chatbotConfig.botUrl;
-      iframe.style.width = "400px";
-      iframe.style.height = "650px";
-      iframe.style.border = "none";
-      iframe.style.zIndex = "9999";
-      // iframe.style.backgroundColor = "#FFFFFF";
-      iframe.style.borderRadius = "18px";
-      // iframe.style.display = "none"; // Initially hidden
-      iframe.style.allowTransparency = "true";
-      // iframe.style.display = "block";
-      document.body.appendChild(iframe);
-    } else {
-      console.log(iframe.offsetWidth, "width matched2");
-
-      document.body.removeChild(iframe);
-      iframe.src = chatbotConfig.botUrl;
-      iframe.style.width = chatbotConfig.width;
-      iframe.style.height = chatbotConfig.height;
-      iframe.style.border = "none";
-      iframe.style.zIndex = "9999";
-      // iframe.style.backgroundColor = "#FFFFFF";
-      iframe.style.borderRadius = "18px";
-      // iframe.style.display = "none"; // Initially hidden
-      iframe.style.allowTransparency = "true";
-      // iframe.style.display = "none";
-      document.body.appendChild(iframe);
-    }
-  });
 
   // Create toggle button
 
