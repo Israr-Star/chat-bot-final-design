@@ -339,7 +339,7 @@ const Chatbot: React.FC = () => {
     <>
       {chatVisible ? (
         <div>
-          <div className="fixed bottom-[90px] right-[5px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
+          <div className="fixed bottom-[90px] right-[24px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
             {/* Header */}
             <div className="relative w-full h-full">
               <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
@@ -512,7 +512,7 @@ const Chatbot: React.FC = () => {
         <></>
       )}
       <div
-        className={`fixed bottom-5 right-[5px] w-14 h-14 rounded-[20px] bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
+        className={`fixed bottom-5 right-[24px] w-14 h-14 rounded-[20px] bg-purple-600 flex items-center justify-center cursor-pointer transition-transform duration-300 ease-in-out ${
           chatVisible ? 'scale-120' : 'scale-100'
         } shadow-[0px_24px_16px_-5px_rgba(124,58,237,0.16),0px_20px_25px_-5px_rgba(0,0,0,0.2)]`}
         onClick={() => setChatVisible((prevChatVisible) => !prevChatVisible)}
