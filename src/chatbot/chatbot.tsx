@@ -63,7 +63,6 @@ const Chatbot: React.FC = () => {
 
       // Assuming the server responds with JSON data
       const data = await response.json() // This parses the JSON body of the response into a JavaScript object
-      console.log(data, 'RESPONSE') // Now 'data' contains the parsed JSON object
       const messageUpdates = data.map((msg: any) => {
         const text =
           msg.text ||
@@ -75,7 +74,6 @@ const Chatbot: React.FC = () => {
           text: text,
         }
       })
-      console.log('NEW MSG')
       setMessageArr(messageUpdates)
 
       // Do something with 'data' here (e.g., update state, display messages)
@@ -127,7 +125,7 @@ const Chatbot: React.FC = () => {
             const data = line.slice('data:'.length).trim()
             try {
               const parsedData = JSON.parse(data)
-              console.log('Received data:', parsedData)
+              // console.log('Received data:', parsedData)
 
               if (parsedData.final) {
                 // const arrayLength = parsedData?.responseMessage?.content?.length
@@ -160,7 +158,6 @@ const Chatbot: React.FC = () => {
                   isCreatedByUser: false,
                   text: parsedData?.text,
                 }
-                console.log(messageArr, 'messageArr Inside')
                 const latestIndex: number =
                   (messageArr?.length && messageArr?.length + 1) || 1
                 setMessageArr((prevMessages: any) => {
@@ -334,10 +331,7 @@ const Chatbot: React.FC = () => {
 
   useEffect(() => {
     // Scroll to the bottom when messages change
-    console.log('scroll')
     if (messageArr?.length && scrollableDivRef.current) {
-      console.log('scroll in')
-
       scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
     }
   }, [messageArr, chatVisible])
@@ -345,7 +339,7 @@ const Chatbot: React.FC = () => {
     <>
       {chatVisible ? (
         <div>
-          <div className="fixed bottom-[90px] right-0 w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_20px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
+          <div className="fixed bottom-[90px] right-[5px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
             {/* Header */}
             <div className="relative w-full h-full">
               <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
@@ -511,20 +505,6 @@ const Chatbot: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="gradient-text"></div>
-//   <div className="h-[64px] border-t-[3px] border-[#E2E8F0] rounded-b-[12px] mt-auto"></div> */}
-              {/* <div className="coloredBg">
- <div className='w-20 h-20'></div>{' '}
-</div> */}
-              {/* Messages Area */}
-              {/* <div className="flex-1 bg-gray-200 p-2 overflow-y-auto">
- <div className="bg-green-100 p-2 my-2 rounded-lg">
-   Hello! How can I assist you today?
- </div>
- <div className="bg-blue-100 p-2 my-2 rounded-lg self-end">
-   I need help with my account.
- </div>
-</div> */}
             </div>
           </div>
         </div>
