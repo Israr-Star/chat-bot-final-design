@@ -3,6 +3,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import Circle from '../components/atom/circle'
 import './chatbot.css'
 import { v4 } from 'uuid'
+import ReactMarkdown from 'react-markdown'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 
 const Chatbot: React.FC = () => {
   type Message = {
@@ -19,32 +22,70 @@ const Chatbot: React.FC = () => {
     thread_id?: string
     conversationId?: string
   }
+  type MessageArrType = {
+    isCreatedByUser: boolean
+    text: string
+  }
   const [inputValue, setInputValue] = useState('')
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      text: '',
-      sender: 'User',
-      isCreatedByUser: true,
-      parentMessageId: '00000000-0000-0000-0000-000000000000',
-      messageId: v4(),
-      error: false,
-      model: 'gpt-4o',
-      assistant_id: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
-      endpoint: 'assistants',
-      responseMessageId: '',
-      thread_id: '',
-      conversationId: '',
-    },
-  ])
-  const [threadId, setThreadId] = useState('')
-  const [messageIdFromApi, setMessageIdFromApi] = useState('')
-  const [messageArr, setMessageArr] = useState<any>()
+  const idsFromApi = JSON.parse(localStorage.getItem('idsFromApi') || '{}')
+  const [threadId, setThreadId] = useState(() => {
+    return idsFromApi?.threadId || ''
+  })
+  const [messageIdFromApi, setMessageIdFromApi] = useState(() => {
+    return idsFromApi?.messageId || ''
+  })
+  const [convoIdFromApi, setConvoIdFromApi] = useState(() => {
+    return idsFromApi?.conversationId || ''
+  })
+
+  const [messageArr, setMessageArr] = useState<MessageArrType[]>()
   const [visible, setVisible] = useState(false)
   const [chatVisible, setChatVisible] = useState(false)
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
   const [isMsgLoading, setIsMsgLoading] = useState(false)
   const scrollableDivRef = useRef<HTMLDivElement>(null)
+  async function getChat(options: { headers: Record<string, string> }) {
+    try {
+      setIsMsgLoading(true)
+      const response = await fetch(
+        `http://localhost:3080/api/messages/public/${convoIdFromApi}`,
+        {
+          method: 'GET',
+          headers: options.headers,
+        },
+      )
+
+      // Check if the response is ok (status in the range 200-299)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      // Assuming the server responds with JSON data
+      const data = await response.json() // This parses the JSON body of the response into a JavaScript object
+      console.log(data, 'RESPONSE') // Now 'data' contains the parsed JSON object
+      const messageUpdates = data.map((msg: any) => {
+        const text =
+          msg.text ||
+          (msg.content &&
+            (msg.content[0]?.text?.value || msg.content[1]?.text?.value)) ||
+          ''
+        return {
+          isCreatedByUser: msg.isCreatedByUser,
+          text: text,
+        }
+      })
+      console.log('NEW MSG')
+      setMessageArr(messageUpdates)
+
+      // Do something with 'data' here (e.g., update state, display messages)
+    } catch (error) {
+      console.error('Failed to fetch messages:', error)
+    } finally {
+      setIsMsgLoading(false)
+    }
+  }
+
   async function fetchSSE(
     url: string,
     options: {
@@ -58,7 +99,6 @@ const Chatbot: React.FC = () => {
       headers: options.headers,
       body: JSON.stringify(options.payload),
     })
-
     if (!response.body) {
       throw new Error(
         'ReadableStream not supported in this environment or response.',
@@ -88,41 +128,48 @@ const Chatbot: React.FC = () => {
             try {
               const parsedData = JSON.parse(data)
               console.log('Received data:', parsedData)
-              if (parsedData?.message) {
+
+              if (parsedData.final) {
+                // const arrayLength = parsedData?.responseMessage?.content?.length
+                // const arr =
+                //   parsedData?.responseMessage?.content[arrayLength - 1]
+
+                setThreadId(parsedData?.responseMessage?.thread_id)
+                setMessageIdFromApi(parsedData?.responseMessage?.messageId)
+                setConvoIdFromApi(parsedData?.responseMessage?.conversationId)
+                const idsFromApi = {
+                  threadId: parsedData?.responseMessage?.thread_id,
+                  messageId: parsedData?.responseMessage?.messageId,
+                  conversationId: parsedData?.responseMessage?.conversationId,
+                }
+                localStorage.setItem('idsFromApi', JSON.stringify(idsFromApi))
+                // const createdBy =
+                //   parsedData?.responseMessage?.content[arrayLength - 1].isCreatedByUser
                 // const messageUpdate = {
                 //   isCreatedByUser: false,
-                //   text: parsedData?.text,
+                //   text: arr.text.value,
                 // }
+                // console.log(messageUpdate, 'NEW MSG')
                 // setMessageArr((prevMessages: any) => [
                 //   ...(Array.isArray(prevMessages) ? prevMessages : []),
                 //   messageUpdate,
                 // ])
-              }
-
-              if (parsedData.final) {
+              } else if (parsedData?.message) {
                 setIsMsgLoading(false)
-                const arrayLength = parsedData?.responseMessage?.content?.length
-                const arr =
-                  parsedData?.responseMessage?.content[arrayLength - 1]
-
-                console.log(
-                  'Received data final:',
-                  parsedData,
-                  parsedData?.responseMessage?.thread_id,
-                )
-                setThreadId(parsedData?.responseMessage?.thread_id)
-                setMessageIdFromApi(parsedData?.responseMessage?.messageId)
-                // const createdBy =
-                //   parsedData?.responseMessage?.content[arrayLength - 1].isCreatedByUser
                 const messageUpdate = {
                   isCreatedByUser: false,
-                  text: arr.text.value,
+                  text: parsedData?.text,
                 }
-                console.log(messageUpdate, 'NEW MSG')
-                setMessageArr((prevMessages: any) => [
-                  ...(Array.isArray(prevMessages) ? prevMessages : []),
-                  messageUpdate,
-                ])
+                console.log(messageArr, 'messageArr Inside')
+                const latestIndex: number =
+                  (messageArr?.length && messageArr?.length + 1) || 1
+                setMessageArr((prevMessages: any) => {
+                  const updatedMessages = Array.isArray(prevMessages)
+                    ? [...prevMessages]
+                    : []
+                  updatedMessages[latestIndex] = messageUpdate
+                  return updatedMessages
+                })
               }
             } catch (error) {
               console.error('Failed to parse JSON:', error)
@@ -143,7 +190,7 @@ const Chatbot: React.FC = () => {
   //   }
   // }
 
-  const makeApiCall = async () => {
+  const sendMessage = async () => {
     const headers = {
       'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
       'x-user-id': '6763acb8d49b7ec3f78d2f98',
@@ -161,11 +208,11 @@ const Chatbot: React.FC = () => {
       assistant_id: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
       endpoint: 'assistants',
     }
-    if (messages[0].text !== '') {
+    if (messageArr && messageArr?.length) {
       payload.parentMessageId = messageIdFromApi
-      payload.responseMessageId = v4()
+      payload.responseMessageId = messageIdFromApi
       payload.thread_id = threadId
-      payload.conversationId = v4()
+      payload.conversationId = convoIdFromApi
     }
 
     fetchSSE('http://localhost:3080/api/assistants/public', {
@@ -176,6 +223,14 @@ const Chatbot: React.FC = () => {
       .catch(console.error)
     // console.log(res, 'FINAL')
   }
+  useEffect(() => {
+    const headers = {
+      'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
+      'x-user-id': '6763acb8d49b7ec3f78d2f98',
+      'Content-Type': 'application/json', // Necessary when sending JSON
+    }
+    getChat({ headers })
+  }, [])
   const startProgress = async () => {
     setInputValue('')
     setShowSendButton(false)
@@ -189,48 +244,7 @@ const Chatbot: React.FC = () => {
       messageUpdate,
     ])
 
-    // if (progressValue === 100) {
-    //   setMessageArr((prevMessages: any) => [
-    //     ...(Array.isArray(prevMessages) ? prevMessages : []),
-    //     messageUpdate,
-    //   ])
-    // }
-    const parentMsgId =
-      messages.length > 1
-        ? messages[messages.length - 2].messageId
-        : '00000000-0000-0000-0000-000000000000'
-    if (messages?.[0].text !== '') {
-      setMessages([
-        ...messages,
-        {
-          text: inputValue,
-          sender: 'User',
-          isCreatedByUser: true,
-          parentMessageId: parentMsgId,
-          messageId: v4(),
-          error: false,
-          model: 'gpt-4o',
-          assistant_id: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
-          endpoint: 'assistants',
-        },
-      ])
-    } else {
-      setMessages([
-        {
-          text: inputValue,
-          sender: 'User',
-          isCreatedByUser: true,
-          parentMessageId: parentMsgId,
-          messageId: v4(),
-          error: false,
-          model: 'gpt-4o',
-          assistant_id: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
-          endpoint: 'assistants',
-        },
-      ])
-    }
-
-    makeApiCall()
+    sendMessage()
   }
 
   const timeoutRef = useRef<number | null>(null)
@@ -260,89 +274,13 @@ const Chatbot: React.FC = () => {
       }, 100) // Adjust the interval time as needed
     }, 600)
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // let svgArrowContainer: any = null // Declare a variable to track the container
 
-  // function createSvgArrow() {
-  //   if (svgArrowContainer) {
-  //     return // Exit if the container already exists
-  //   }
-  //   // Create an SVG element and set its attributes
-  //   const svgNS = 'http://www.w3.org/2000/svg'
-  //   const svg = document.createElementNS(svgNS, 'svg')
-  //   svg.setAttribute('width', '30')
-  //   svg.setAttribute('height', '30')
-  //   svg.setAttribute('viewBox', '0 0 24 24')
-  //   // Create a polygon element for the down arrow and set attributes
-  //   const polygon = document.createElementNS(svgNS, 'polygon')
-  //   polygon.setAttribute('points', '12,16 4,8 20,8')
-  //   polygon.setAttribute('fill', 'white')
-  //   // Append the polygon to the SVG element
-  //   svg.appendChild(polygon)
-  //   // Create the container div
-  //   const containerDiv = document.createElement('div')
-  //   containerDiv.style.boxShadow =
-  //     '0px 24px 16px -5px #7C3AED29, 0px 20px 25px -5px #00000033'
-  //   const img = document.createElement('img')
-  //   img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
-  //   img.alt = 'SVG Icon'
-  //   img.style.width = '24px'
-  //   img.style.height = '24px'
-  //   containerDiv.appendChild(img)
-  //   containerDiv.style.width = '54px'
-  //   containerDiv.style.height = '54px'
-  //   containerDiv.style.borderRadius = '18px'
-  //   containerDiv.style.backgroundColor = '#7C3AED'
-  //   containerDiv.style.display = 'flex'
-  //   containerDiv.style.alignItems = 'center'
-  //   containerDiv.style.justifyContent = 'center'
-  //   containerDiv.style.transition = 'transform 0.3s ease'
-  //   containerDiv.style.position = 'fixed'
-  //   containerDiv.style.bottom = '20px'
-  //   containerDiv.style.right = '20px'
-  //   containerDiv.style.cursor = 'pointer'
-  //   let isChatShown = false
-  //   containerDiv.onclick = () => {
-  //     if (isChatShown) {
-  //       isChatShown = false
-  //       containerDiv.removeChild(img)
-  //       img.src = '/src/assets/icon/chat.svg' // Replace with the path to your SVG icon
-  //       img.alt = 'SVG Icon'
-  //       img.style.width = '24px'
-  //       img.style.height = '24px'
-  //       containerDiv.appendChild(img)
-  //     } else {
-  //       isChatShown = true
-  //       containerDiv.removeChild(img)
-  //       img.src = '/src/assets/icon/arrow.svg' // Replace with the path to your SVG icon
-  //       img.alt = 'SVG Icon'
-  //       img.style.width = '24px'
-  //       img.style.height = '24px'
-  //       containerDiv.appendChild(img)
-  //     }
-  //     setChatVisible((prevChatVisible) => !prevChatVisible)
-  //   }
-  //   containerDiv.onmouseover = () => {
-  //     containerDiv.style.transform = 'scale(1.2)'
-  //   }
-  //   containerDiv.onmouseout = () => {
-  //     containerDiv.style.transform = 'scale(1)'
-  //   }
-  //   document.body.appendChild(containerDiv)
-  //   // Save the reference
-  //   svgArrowContainer = containerDiv
-  // }
-  // // Use in useEffect
-  // useEffect(() => {
-  //   createSvgArrow()
-  // }, [])
   useEffect(() => {
     // Trigger the visibility state after the component mounts
     setTimeout(() => {
       setVisible(true)
     }, 1000)
   }, [])
-  console.log(isMsgLoading, 'isMsgLoading')
   const renderedMessages = React.useMemo(() => {
     return (
       messageArr?.length &&
@@ -378,7 +316,15 @@ const Chatbot: React.FC = () => {
                   background: 'linear-gradient(90deg, #FF007E, #00E5FF)',
                 }}
               ></div>
-              <div className="leftCorner">{messageItem?.text}</div>
+
+              <div className="leftCorner">
+                <ReactMarkdown
+                  remarkPlugins={[remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {messageItem?.text?.replace(/\^/g, '')}
+                </ReactMarkdown>
+              </div>
             </div>
           )}
         </div>
@@ -388,15 +334,18 @@ const Chatbot: React.FC = () => {
 
   useEffect(() => {
     // Scroll to the bottom when messages change
-    if (scrollableDivRef.current) {
+    console.log('scroll')
+    if (messageArr?.length && scrollableDivRef.current) {
+      console.log('scroll in')
+
       scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
     }
-  }, [messageArr])
+  }, [messageArr, chatVisible])
   return (
     <>
       {chatVisible ? (
         <div>
-          <div className="fixed bottom-[90px] right-0 w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
+          <div className="fixed bottom-[90px] right-0 w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_20px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
             {/* Header */}
             <div className="relative w-full h-full">
               <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
@@ -421,30 +370,40 @@ const Chatbot: React.FC = () => {
                 <div className="flex justify-between w-full">
                   <p className="w-full">BJIT AI assistant</p>
                   <div className="flex justify-end w-full gap-2">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="cursor-pointer"
-                      onClick={() => setInputValue('')}
+                    <div
+                      onClick={() => {
+                        setInputValue('')
+                        setShowSendButton(false)
+                      }}
+                      style={{
+                        pointerEvents: inputValue === '' ? 'none' : 'auto',
+                        opacity: inputValue === '' ? 0.5 : 1,
+                      }}
                     >
-                      <path
-                        d="M17 12C17 12.9889 16.7068 13.9556 16.1573 14.7778C15.6079 15.6001 14.827 16.241 13.9134 16.6194C12.9998 16.9978 11.9945 17.0969 11.0245 16.9039C10.0546 16.711 9.16373 16.2348 8.46447 15.5355C7.76521 14.8363 7.289 13.9454 7.09608 12.9754C6.90315 12.0055 7.00217 11.0002 7.3806 10.0866C7.75904 9.17295 8.3999 8.39206 9.22215 7.84265C10.0444 7.29324 11.0111 7 12 7C13.4 7 14.7389 7.55556 15.7444 8.52222L17 9.77778"
-                        stroke="white"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M16.9999 7V9.77778H14.2222"
-                        stroke="white"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="cursor-pointer"
+                      >
+                        <path
+                          d="M17 12C17 12.9889 16.7068 13.9556 16.1573 14.7778C15.6079 15.6001 14.827 16.241 13.9134 16.6194C12.9998 16.9978 11.9945 17.0969 11.0245 16.9039C10.0546 16.711 9.16373 16.2348 8.46447 15.5355C7.76521 14.8363 7.289 13.9454 7.09608 12.9754C6.90315 12.0055 7.00217 11.0002 7.3806 10.0866C7.75904 9.17295 8.3999 8.39206 9.22215 7.84265C10.0444 7.29324 11.0111 7 12 7C13.4 7 14.7389 7.55556 15.7444 8.52222L17 9.77778"
+                          stroke="white"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M16.9999 7V9.77778H14.2222"
+                          stroke="white"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
                     <svg
                       width="24"
                       height="24"
