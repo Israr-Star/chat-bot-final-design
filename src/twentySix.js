@@ -1,15 +1,22 @@
 (function () {
   if (window.ChatbotScriptLoaded) return;
   window.ChatbotScriptLoaded = true;
+  const currentScriptTag =
+    document.currentScript ||
+    Array.from(document.getElementsByTagName("script")).pop();
 
+  const param1 = currentScriptTag.getAttribute("data-param1");
+  const param2 = currentScriptTag.getAttribute("data-bg");
+
+  console.log(param1, param2);
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/",
     width: "450px",
     height: "660px",
     position: "bottom-right",
     queryParams: {
-      bgColor: 'red' // Dynamic value
-    }
+      bgColor: param2, // Dynamic value
+    },
   };
 
   const queryString = new URLSearchParams(chatbotConfig.queryParams).toString();
