@@ -335,6 +335,18 @@ const Chatbot: React.FC = () => {
       scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
     }
   }, [messageArr, chatVisible])
+  const [color, setColor] = useState('bg-blue-500')
+  useEffect(() => {
+    // Obtain the search string from the current window's URL
+    const searchParams = new URLSearchParams(window.location.search)
+    const bgColorQueryParam = searchParams.get('bgColor')
+
+    // Set state
+    console.log(bgColorQueryParam, 'bgColorQueryParam')
+    if (bgColorQueryParam === 'red') {
+      setColor('bg-red-500')
+    }
+  }, [])
   return (
     <>
       {chatVisible ? (
@@ -342,7 +354,9 @@ const Chatbot: React.FC = () => {
           <div className="fixed bottom-[90px] right-[24px] w-[400px] h-[560px] bg-white z-50 flex flex-col rounded-[12px] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),_0px_10px_10px_-5px_rgba(0,0,0,0.04)]">
             {/* Header */}
             <div className="relative w-full h-full">
-              <div className="bg-[--primary] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]">
+              <div
+                className={`${color} text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]`}
+              >
                 <div className="w-6 h-6 rounded-lg">
                   <svg
                     width="24"
