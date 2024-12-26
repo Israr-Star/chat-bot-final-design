@@ -345,6 +345,8 @@ const Chatbot: React.FC = () => {
     console.log(bgColorQueryParam, 'bgColorQueryParam')
     if (bgColorQueryParam === 'red') {
       setColor('bg-red-500')
+    } else if (bgColorQueryParam === 'yellow') {
+      setColor('bg-yellow-500')
     }
   }, [])
   return (
