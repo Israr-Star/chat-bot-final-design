@@ -1,6 +1,12 @@
 (function () {
   if (window.ChatbotScriptLoaded) return;
   window.ChatbotScriptLoaded = true;
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var scriptTag = document.getElementById("myscript");
+    var params = JSON.parse(scriptTag.getAttribute("data-params"));
+    console.log(params, "paramsObj"); // object { key1: "value1", key2: true, key3: [1, 2, 3] }
+  });
   const currentScriptTag =
     document.currentScript ||
     Array.from(document.getElementsByTagName("script")).pop();
