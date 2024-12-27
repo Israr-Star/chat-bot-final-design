@@ -5,26 +5,26 @@
     document.currentScript ||
     Array.from(document.getElementsByTagName("script")).pop();
 
-  const paramObj = currentScriptTag.getAttribute("data-info");
-  // const param2 = currentScriptTag.getAttribute("data-bg");
+  // const paramObj = currentScriptTag.getAttribute("data-info");
+  // // const param2 = currentScriptTag.getAttribute("data-bg");
 
-  console.log(JSON.parse(paramObj), "OBJECT");
+  // console.log(JSON.parse(paramObj), "OBJECT");
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/",
     width: "450px",
     height: "660px",
     position: "bottom-right",
-    queryParams: {
-      bgColor: param2, // Dynamic value
-      headerTitle: paramObj?.headerTitle || "Chat with us",
-    },
+    // queryParams: {
+    //   bgColor: param2, // Dynamic value
+    //   headerTitle: paramObj?.headerTitle || "Chat with us",
+    // },
   };
 
   const queryString = new URLSearchParams(chatbotConfig.queryParams).toString();
   const chatbotUrlWithParams = `${chatbotConfig.botUrl}?${queryString}`;
 
   const iframe = document.createElement("iframe");
-  iframe.src = chatbotUrlWithParams;
+  iframe.src = chatbotConfig.botUrl;
   iframe.style.width = chatbotConfig.width;
   iframe.style.height = chatbotConfig.height;
   iframe.style.position = "fixed";
