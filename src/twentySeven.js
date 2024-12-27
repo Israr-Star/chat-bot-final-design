@@ -5,10 +5,10 @@
     document.currentScript ||
     Array.from(document.getElementsByTagName("script")).pop();
 
-  const param1 = currentScriptTag.getAttribute("data-param1");
-  const param2 = currentScriptTag.getAttribute("data-bg");
+  const paramObj = currentScriptTag.getAttribute("data-info");
+  // const param2 = currentScriptTag.getAttribute("data-bg");
 
-  console.log(param1, param2);
+  console.log(JSON.parse(paramObj), "OBJECT");
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/",
     width: "450px",
@@ -16,6 +16,7 @@
     position: "bottom-right",
     queryParams: {
       bgColor: param2, // Dynamic value
+      headerTitle: paramObj?.headerTitle || "Chat with us",
     },
   };
 
