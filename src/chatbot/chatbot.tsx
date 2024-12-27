@@ -339,7 +339,7 @@ const Chatbot: React.FC = () => {
   useEffect(() => {
     // Obtain the search string from the current window's URL
     const searchParams = new URLSearchParams(window.location.search)
-    // const bgColorQueryParam = searchParams.get('bgColor')
+    const bgColorQueryParamPre = searchParams.get('bgColor')
     const queryParams: { [key: string]: string | null } = {}
     searchParams.forEach((value, key) => {
       queryParams[key] = value
@@ -348,7 +348,12 @@ const Chatbot: React.FC = () => {
     const bgColorQueryParam = queryParams['bgColor']
 
     // Set state
-    console.log(bgColorQueryParam, searchParams, 'bgColorQueryParam')
+    console.log(
+      bgColorQueryParam,
+      searchParams,
+      bgColorQueryParamPre,
+      'bgColorQueryParam',
+    )
     if (bgColorQueryParam === 'red') {
       setColor('bg-red-500')
     } else if (bgColorQueryParam === 'yellow') {
