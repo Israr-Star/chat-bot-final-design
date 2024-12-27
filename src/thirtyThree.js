@@ -6,10 +6,10 @@
     document.currentScript ||
     Array.from(document.getElementsByTagName("script")).pop();
 
-  const paramObj = currentScriptTag.getAttribute("data-params");
+  const paramObj = JSON.parse(currentScriptTag.getAttribute("data-params"));
   // // const param2 = currentScriptTag.getAttribute("data-bg");
 
-  console.log(JSON.parse(paramObj), "OBJECT");
+  console.log(paramObj, "OBJECT");
   const chatbotConfig = {
     botUrl: "https://chat-bot-final-design.vercel.app/",
     width: "450px",
