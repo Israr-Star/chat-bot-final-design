@@ -26,6 +26,14 @@ const Chatbot: React.FC = () => {
     isCreatedByUser: boolean
     text: string
   }
+  type ParamObjType = {
+    bgColor: string
+    headerTitle: string
+    userId: string
+    apiKey: string
+    assistantId: string
+  }
+
   const [inputValue, setInputValue] = useState('')
   const idsFromApi = JSON.parse(localStorage.getItem('idsFromApi') || '{}')
   const [threadId, setThreadId] = useState(() => {
@@ -44,15 +52,29 @@ const Chatbot: React.FC = () => {
   const [showSendButton, setShowSendButton] = useState(false)
   const [progress, setProgress] = useState(0)
   const [isMsgLoading, setIsMsgLoading] = useState(false)
+  const [paramObj, setParamObj] = useState<ParamObjType>({
+    bgColor: '',
+    headerTitle: '',
+    userId: '6763acb8d49b7ec3f78d2f98',
+    apiKey: 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
+    assistantId: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
+  })
   const scrollableDivRef = useRef<HTMLDivElement>(null)
+  const headers = {
+    'x-api-key': paramObj?.apiKey,
+    'x-user-id': paramObj?.userId,
+    'Content-Type': 'application/json', // Necessary when sending JSON
+  }
+
   async function getChat(options: { headers: Record<string, string> }) {
     try {
+      console.log(options)
       setIsMsgLoading(true)
       const response = await fetch(
         `http://localhost:3080/api/messages/public/${convoIdFromApi}`,
         {
           method: 'GET',
-          headers: options.headers,
+          headers: headers,
         },
       )
 
@@ -188,11 +210,11 @@ const Chatbot: React.FC = () => {
   // }
 
   const sendMessage = async () => {
-    const headers = {
-      'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
-      'x-user-id': '6763acb8d49b7ec3f78d2f98',
-      'Content-Type': 'application/json', // Necessary when sending JSON
-    }
+    // const headers = {
+    //   'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
+    //   'x-user-id': '6763acb8d49b7ec3f78d2f98',
+    //   'Content-Type': 'application/json', // Necessary when sending JSON
+    // }
 
     const payload: Message = {
       text: inputValue,
@@ -202,7 +224,7 @@ const Chatbot: React.FC = () => {
       messageId: v4(),
       error: false,
       model: 'gpt-4o',
-      assistant_id: 'asst_Rqpzjwm2cFOGtOrOnT6K8DdC',
+      assistant_id: paramObj?.assistantId,
       endpoint: 'assistants',
     }
     if (messageArr && messageArr?.length) {
@@ -221,11 +243,11 @@ const Chatbot: React.FC = () => {
     // console.log(res, 'FINAL')
   }
   useEffect(() => {
-    const headers = {
-      'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
-      'x-user-id': '6763acb8d49b7ec3f78d2f98',
-      'Content-Type': 'application/json', // Necessary when sending JSON
-    }
+    // const headers = {
+    //   'x-api-key': 'd66e08f6-071c-49f6-8b36-7f5ac081f756',
+    //   'x-user-id': '6763acb8d49b7ec3f78d2f98',
+    //   'Content-Type': 'application/json', // Necessary when sending JSON
+    // }
     getChat({ headers })
   }, [])
   const startProgress = async () => {
@@ -335,7 +357,8 @@ const Chatbot: React.FC = () => {
       scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
     }
   }, [messageArr, chatVisible])
-  const [color, setColor] = useState('#7C3AED')
+  // const [color, setColor] = useState('#7C3AED')
+
   useEffect(() => {
     // Obtain the search string from the current window's URL
     const searchParams = new URLSearchParams(window.location.search)
@@ -345,16 +368,17 @@ const Chatbot: React.FC = () => {
       queryParams[key] = value
     })
     console.log(queryParams, 'queryParams')
-    const bgColorQueryParam = queryParams['bgColor']
-
+    // const bgColorQueryParam = queryParams['bgColor']
+    setParamObj({
+      bgColor: queryParams['bgColor'] || '#7C3AED',
+      headerTitle: queryParams['headerTitle'] || 'AI Assistant',
+      userId: queryParams['userId'] || '',
+      apiKey: queryParams['apiKey'] || '',
+      assistantId: queryParams['assistantId'] || '',
+    })
     // Set state
-    console.log(
-      bgColorQueryParam,
-      searchParams,
-      bgColorQueryParamPre,
-      'bgColorQueryParam',
-    )
-    setColor(bgColorQueryParam || color)
+    console.log(searchParams, bgColorQueryParamPre, 'bgColorQueryParam')
+    // setColor(bgColorQueryParam || color)
 
     // if (bgColorQueryParam === 'red') {
     //   setColor('bg-red-500')
@@ -362,7 +386,7 @@ const Chatbot: React.FC = () => {
     //   setColor('bg-yellow-500')
     // }
   }, [])
-  console.log(color, typeof color, 'color')
+  console.log(paramObj, 'paramObj State')
   return (
     <>
       {chatVisible ? (
@@ -371,7 +395,7 @@ const Chatbot: React.FC = () => {
             {/* Header */}
             <div className="relative w-full h-full">
               <div
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: paramObj?.bgColor }}
                 className={`text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]`}
               >
                 <div className="w-6 h-6 rounded-lg">
@@ -393,7 +417,7 @@ const Chatbot: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex justify-between w-full">
-                  <p className="w-full">BJIT AI assistant</p>
+                  <p className="w-full">{paramObj?.headerTitle}</p>
                   <div className="flex justify-end w-full gap-2">
                     <div
                       onClick={() => {

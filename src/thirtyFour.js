@@ -18,6 +18,9 @@
     queryParams: {
       bgColor: paramObj?.bgColor, // Dynamic value
       headerTitle: paramObj?.headerTitle || "Chat with us",
+      userId: paramObj?.userId,
+      apiKey: paramObj?.apiKey,
+      assistantId: paramObj?.assistantId,
     },
   };
 
