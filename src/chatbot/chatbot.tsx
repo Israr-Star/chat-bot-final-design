@@ -371,7 +371,8 @@ const Chatbot: React.FC = () => {
             {/* Header */}
             <div className="relative w-full h-full">
               <div
-                className={`bg-[${color.toString()}] text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]`}
+                style={{ backgroundColor: color }}
+                className={`text-white py-3 px-4 rounded-t-[12px] text-base font-bold leading-6 tracking-normal flex gap-2 mb-[100px]`}
               >
                 <div className="w-6 h-6 rounded-lg">
                   <svg
